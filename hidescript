@@ -2,32 +2,10 @@
 
 $template =
 '#!/usr/bin/perl
-use MIME::Base64;use POSIX qw{mkfifo};
-sub s_d {return decode_base64(shift);}
-my $v_t = "/tmp/.$$";
-my $v_c =
-#CRYPTED#;
-my $v_d = s_d($v_c);
-my $v_s = ($v_d =~ /^#!(.*?)$/ms)[0];
-mkfifo($v_t, 0700) or die "mkfifo";
-my $v_p = fork;
-die "fork" if (!defined($v_p));
-if ($v_p) {
-  open H_E, ">$v_t" or die "open";
-  select H_E;
-  $|=1;
-  print "$v_d";
-  close H_E;
-  wait;
-  unlink "$v_t";
-} else {
-  unshift @ARGV, ("$v_s", "$v_t");
-  exec {"$v_s"} @ARGV or die "exec fils";
-}
-';
+use MIME::Base64;use POSIX qw{mkfifo};sub s_d {return decode_base64(shift);}my $v_t="/tmp/.$$";my $v_c=#CRYPTED#;my $v_d=s_d($v_c);my $v_s=($v_d=~/^#!(.*?)$/ms)[0];mkfifo($v_t,0700) or die "mkfifo";my $v_p=fork;die "fork" if (!defined($v_p));if ($v_p) {open H_E,">$v_t" or die "open";select H_E;$|=1;print"$v_d";close H_E;wait;unlink "$v_t";}else{unshift @ARGV,("$v_s","$v_t");exec{"$v_s"} @ARGV or die "exec fils";}';
 
 use MIME::Base64;
-sub crypte { return encode_base64(shift); }
+sub crypte { return encode_base64(shift,""); }
 open(SCRIPT, "$ARGV[0]") or die "open [$ARGV[0]]: $!";
 local $/=undef;
 my $coded = crypte(<SCRIPT>);
